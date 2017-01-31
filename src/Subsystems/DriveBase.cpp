@@ -1,17 +1,14 @@
-#include "ExampleSubsystem.h"
-
+#include "DriveBase.h"
 #include "../RobotMap.h"
 
-ExampleSubsystem::ExampleSubsystem() :
-		frc::Subsystem("ExampleSubsystem") {
+DriveBase::DriveBase() : Subsystem("ExampleSubsystem") {
 
 }
 
-void ExampleSubsystem::InitDefaultCommand() {
+void DriveBase::InitDefaultCommand() {
 	// Set the default command for a subsystem here.
 	// SetDefaultCommand(new MySpecialCommand());
 }
 
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
-
