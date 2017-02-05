@@ -10,12 +10,13 @@ public:
 
 	// Flag for PID controller input type
 
-	enum class PIDInput {
+	enum class PIDInputType {
 		NoPIDInput, EncoderPIDInput, GyroPIDInput
 	};
 
-	PIDInput currentInputType;
+	PIDInputType currentInputType;
 
+private:
 	// Motors driving front-left mecanum wheel
 	Victor leftFA = new Victor(leftFA);
 	Victor leftFB = new Victor(leftFB);
@@ -44,10 +45,23 @@ public:
 
 	double kToleranceDegrees = 2.0;
 
+public:
 	DriveBase();
-	double ReturnPIDInput();
 	void UsePIDOutput(double output);
 	void InitDefaultCommand();
+	void mecanumDrive(double xIn, double yIn, double rotation);
+	void stop();
+	void setGyroPIDControl(double setpoint);
+	void setEncoderPIDControl(double setpoint);
+	void setNoPid();
+	double ReturnPIDInput();
+	void usePIDOutput(double output);
+
+protected:
+	void setLeftFSpeed(double speed);
+	void setLeftBSpeed(double speed);
+	void setRightFSpeed(double speed);
+	void setRightBSpeed(double speed);
 };
 
 #endif  // DriveBase_H
