@@ -7,8 +7,8 @@
 class OI {
 public:
 
-	static const Joystick driver;
-	static const Joystick operatorJoy;
+	static const Joystick* driver;
+	static const Joystick* operatorJoy;
 
 	static const JoystickButton* driverX;
 	static const JoystickButton* driverA;

@@ -4,7 +4,7 @@
 
 OI::OI() {
 	// Process operator interface input here.
-	driver = new Joystick(0);
+//	driver = new Joystick(0);
 	operatorJoy = new Joystick(1);
 
 	//
