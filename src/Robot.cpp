@@ -8,8 +8,12 @@
 #include <SmartDashboard/SmartDashboard.h>
 
 #include "CommandBase.h"
+#include "DriveBase.h"
 
 class Robot: public frc::IterativeRobot {
+
+	DriveBase* driveBase = new DriveBase();
+
 public:
 	void RobotInit() override {
 		// chooser.AddObject("My Auto", new MyAutoCommand());
