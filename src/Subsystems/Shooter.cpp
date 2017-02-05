@@ -2,7 +2,6 @@
 #include "../RobotMap.h"
 
 Shooter::Shooter() : Subsystem("ExampleSubsystem") {
-
 }
 
 void Shooter::InitDefaultCommand() {

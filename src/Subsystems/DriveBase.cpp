@@ -53,23 +53,23 @@ void DriveBase::mecanumDrive(double xIn, double yIn, double rotation){
     }
 
 void DriveBase::setLeftFSpeed(double speed) {
-    	leftFA.Set(speed);
-    	leftFB.Set(speed);
+    	leftFA->Set(speed);
+    	leftFB->Set(speed);
     }
 
 void DriveBase::setLeftBSpeed(double speed) {
-    	leftBA.Set(speed);
-    	leftBA.Set(speed);
+    	leftBA->Set(speed);
+    	leftBA->Set(speed);
     }
 
 void DriveBase::setRightFSpeed(double speed) {
-    	rightFA.Set(speed);
-    	rightFB.Set(speed);
+    	rightFA->Set(speed);
+    	rightFB->Set(speed);
     }
 
 void DriveBase::setRightBSpeed(double speed) {
-    	rightBA.Set(speed);
-    	rightBB.Set(speed);
+    	rightBA->Set(speed);
+    	rightBB->Set(speed);
     }
 
 

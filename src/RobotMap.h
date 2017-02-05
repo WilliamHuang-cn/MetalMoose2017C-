@@ -8,16 +8,16 @@
  * floating around.
  */
 
-constexpr int leftFA = 4;
-constexpr int leftFB = 5;
-constexpr int leftBA = 6;
-constexpr int leftBB = 7;
-constexpr int rightFA = 0;
-constexpr int rightFB = 1;
-constexpr int rightBA = 2;
-constexpr int rightBB = 3;
+static constexpr int leftFAChannel = 4;
+static constexpr int leftFBChannel = 5;
+static constexpr int leftBAChannel = 6;
+static constexpr int leftBBChannel = 7;
+static constexpr int rightFAChannel = 0;
+static constexpr int rightFBChannel = 1;
+static constexpr int rightBAChannel = 2;
+static constexpr int rightBBChannel = 3;
 
-constexpr int shooterMotor = 4;
+static constexpr int shooterMotor = 4;
 
 constexpr int encoderLeftF[] = { 0, 1 };
 

@@ -1,11 +1,12 @@
-#ifndef JoystickTrigger_H
-#define JoystickTrigger_H
+#ifndef JoyStickTrigger_H
+#define JoyStickTrigger_H
 
 #include <Buttons/Trigger.h>
 
-class JoystickTrigger : public Trigger {
+//class JoyStickTrigger : public Trigger {
+class JoyStickTrigger {
 public:
-	JoystickTrigger();
+	JoyStickTrigger();
 	bool Get() const;
 };
 

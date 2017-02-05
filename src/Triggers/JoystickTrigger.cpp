@@ -1,10 +1,10 @@
-#include "JoystickTrigger.h"
+#include "JoyStickTrigger.h"
 
-JoystickTrigger::JoystickTrigger() {
+JoyStickTrigger::JoyStickTrigger() {
 
 }
 
-bool JoystickTrigger::Get() const {
-	return false;
+bool JoyStickTrigger::Get() const {
+	return true;
 }
 

@@ -3,6 +3,8 @@
 
 
 #include <WPILib.h>
+#include <Buttons/JoystickButton.h>
+#include <Joystick.h>
 
 class OI {
 public:
@@ -10,7 +12,7 @@ public:
 	static const Joystick* driver;
 	static const Joystick* operatorJoy;
 
-	static const JoystickButton* driverX;
+	static const JoystickButton *driverX;
 	static const JoystickButton* driverA;
 	static const JoystickButton* driverB;
 	static const JoystickButton* driverY;

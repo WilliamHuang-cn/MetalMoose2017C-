@@ -1,13 +1,11 @@
 #include "OI.h"
 
-//#include <WPILib.h>
-
 OI::OI() {
+
+	using namespace frc;
 	// Process operator interface input here.
 //	driver = new Joystick(0);
 	operatorJoy = new Joystick(1);
-
-	//
 
 	driverX = new JoystickButton(driver, 0);
 	driverA = new JoystickButton(driver, 1);
