@@ -15,12 +15,9 @@ class Robot: public frc::IterativeRobot {
 
 public:
 
-	static DriveBase* driveBaseSub;
-
 	void RobotInit() override {
 		// chooser.AddObject("My Auto", new MyAutoCommand());
 		frc::SmartDashboard::PutData("Auto Modes", &chooser);
-		driveBaseSub = new DriveBase();
 	}
 
 	/**
@@ -82,7 +79,7 @@ public:
 	}
 
 	void TestPeriodic() override {
-		frc::LiveWindow::GetInstance()->Run();
+//		frc::LiveWindow::GetInstance()->Run();
 	}
 
 private:

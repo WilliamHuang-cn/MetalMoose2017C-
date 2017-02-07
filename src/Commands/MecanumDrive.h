@@ -2,7 +2,6 @@
 #define MecanumDrive_H
 
 #include "../CommandBase.h"
-#include "Robot.cpp"
 
 class MecanumDrive : public CommandBase {
 public:

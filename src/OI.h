@@ -1,36 +1,37 @@
 #ifndef OI_H
 #define OI_H
 
-
 #include <WPILib.h>
 #include <Buttons/JoystickButton.h>
 #include <Joystick.h>
 
+//using namespace frc;
+
 class OI {
 public:
 
-	static const Joystick* driver;
-	static const Joystick* operatorJoy;
+	static Joystick* driver;
+	static Joystick* operatorJoy;
 
-	static const JoystickButton *driverX;
-	static const JoystickButton* driverA;
-	static const JoystickButton* driverB;
-	static const JoystickButton* driverY;
+	static JoystickButton *driverX;
+	static JoystickButton* driverA;
+	static JoystickButton* driverB;
+	static JoystickButton* driverY;
 
-	static const JoystickButton* driverLB;
-	static const JoystickButton* driverRB;
-	static const JoystickButton* driverLT;
-	static const JoystickButton* driverRT;
+	static JoystickButton* driverLB;
+	static JoystickButton* driverRB;
+	static JoystickButton* driverLT;
+	static JoystickButton* driverRT;
 
-	static const JoystickButton* operatorX;
-	static const JoystickButton* operatorA;
-	static const JoystickButton* operatorB;
-	static const JoystickButton* operatorY;
+	static JoystickButton* operatorX;
+	static JoystickButton* operatorA;
+	static JoystickButton* operatorB;
+	static JoystickButton* operatorY;
 
-	static const JoystickButton* operatorLB;
-	static const JoystickButton* operatorRB;
-	static const JoystickButton* operatorLT;
-	static const JoystickButton* operatorRT;
+	static JoystickButton* operatorLB;
+	static JoystickButton* operatorRB;
+	static JoystickButton* operatorLT;
+	static JoystickButton* operatorRT;
 
 //DRIVE CODE
 

@@ -9,6 +9,7 @@
 //		std::make_unique<ExampleSubsystem>();
 
 std::unique_ptr<OI> CommandBase::oi = std::make_unique<OI>();
+std::unique_ptr<DriveBase> CommandBase::driveBase = std::make_unique<DriveBase>();
 
 CommandBase::CommandBase(const std::string &name) :
 		frc::Command(name) {
