@@ -13,5 +13,4 @@ std::unique_ptr<DriveBase> CommandBase::driveBase = std::make_unique<DriveBase>(
 
 CommandBase::CommandBase(const std::string &name) :
 		frc::Command(name) {
-
 }

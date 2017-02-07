@@ -9,7 +9,7 @@ DriveBase::DriveBase() : PIDSubsystem("DriveBase", 0.0, 0.0, 0.0) {
 	// SetSetpoint() -  Sets where the PID controller should move the system
 	//                  to
 	// Enable() - Enables the PID controller.
-	this->currentInputType = PIDInputType::NoPIDInput;
+	currentInputType = PIDInputType::NoPIDInput;
 }
 
 double DriveBase::ReturnPIDInput() {
@@ -53,23 +53,23 @@ void DriveBase::mecanumDrive(double xIn, double yIn, double rotation){
     }
 
 void DriveBase::setLeftFSpeed(double speed) {
-    	leftFA->Set(speed);
-    	leftFB->Set(speed);
+    	leftFA.Set(speed);
+    	leftFB.Set(speed);
     }
 
 void DriveBase::setLeftBSpeed(double speed) {
-    	leftBA->Set(speed);
-    	leftBA->Set(speed);
+    	leftBA.Set(speed);
+    	leftBA.Set(speed);
     }
 
 void DriveBase::setRightFSpeed(double speed) {
-    	rightFA->Set(speed);
-    	rightFB->Set(speed);
+    	rightFA.Set(speed);
+    	rightFB.Set(speed);
     }
 
 void DriveBase::setRightBSpeed(double speed) {
-    	rightBA->Set(speed);
-    	rightBB->Set(speed);
+    	rightBA.Set(speed);
+    	rightBB.Set(speed);
     }
 
 
@@ -85,8 +85,8 @@ void DriveBase::stop() {
 void DriveBase::setGyroPIDControl(double setpoint) {
 
     	if(currentInputType != PIDInputType::GyroPIDInput){
-    	this->GetPIDController()->SetInputRange(-180.0,  180.0);
-    	this->GetPIDController()->SetAbsoluteTolerance(kToleranceDegrees);
+    	GetPIDController()->SetInputRange(-180.0,  180.0);
+    	GetPIDController()->SetAbsoluteTolerance(kToleranceDegrees);
     	// set PID input from gyro
         currentInputType = PIDInputType::GyroPIDInput;
     	// set PID setpoint

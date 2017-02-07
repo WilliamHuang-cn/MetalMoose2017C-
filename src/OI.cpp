@@ -4,25 +4,25 @@ using namespace frc;
 
 OI::OI() {
 	// Process operator interface input here.
-	driver = new Joystick(0);
-	operatorJoy = new frc::Joystick(1);
+	OI::driver = &_driver;
+	OI::operatorJoy = &_operator;
 
-	driverX = new JoystickButton(driver, 0);
-	driverA = new JoystickButton(driver, 1);
-	driverB = new JoystickButton(driver, 2);
-	driverY = new JoystickButton(driver, 3);
-	driverLB = new JoystickButton(driver, 4);
-	driverRB = new JoystickButton(driver, 5);
-	driverLT = new JoystickButton(driver, 6);
-	driverRT = new JoystickButton(driver, 7);
+	OI::driverX = &_driverX;
+	OI::driverA = &_driverA;
+	OI::driverB = &_driverB;
+	OI::driverY = &_driverY;
+	OI::driverLB = &_driverLB;
+	OI::driverRB = &_driverRB;
+	OI::driverLT = &_driverLT;
+	OI::driverRT = &_driverRT;
 
-	operatorX = new JoystickButton(operatorJoy, 0);
-	operatorA = new JoystickButton(operatorJoy, 1);
-	operatorB = new JoystickButton(operatorJoy, 2);
-	operatorY = new JoystickButton(operatorJoy, 3);
+	OI::operatorX = &_operatorX;
+	OI::operatorA = &_operatorA;
+	OI::operatorB = &_operatorB;
+	OI::operatorY = &_operatorY;
 
-	operatorLB = new JoystickButton(operatorJoy, 4);
-	operatorRB = new JoystickButton(operatorJoy, 5);
-	operatorLT = new JoystickButton(operatorJoy, 6);
-	operatorRT = new JoystickButton(operatorJoy, 7);
+	OI::operatorLB = &_operatorLB;
+	OI::operatorRB = &_operatorRB;
+	OI::operatorLT = &_operatorLT;
+	OI::operatorRT = &_operatorRT;
 }

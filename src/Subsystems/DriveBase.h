@@ -4,7 +4,6 @@
 #include <Commands/PIDSubsystem.h>
 #include "RobotMap.h"
 #include <WPILib.h>
-#include <Victor.h>
 
 class DriveBase: public PIDSubsystem {
 public:
@@ -19,29 +18,29 @@ public:
 
 private:
 	// Motors driving front-left mecanum wheel
-	Victor* leftFA = new Victor(leftFAChannel);
-	Victor* leftFB = new Victor(leftFBChannel);
+	Victor leftFA {leftFAChannel};
+	Victor leftFB {leftFBChannel};
 
 	// Motors driving back-left mecanum wheel
-	Victor* leftBA = new Victor(leftBAChannel);
-	Victor* leftBB = new Victor(leftBBChannel);
+	Victor leftBA {leftBAChannel};
+	Victor leftBB {leftBBChannel};
 
 	// Motors driving front-right mecanum wheel
-	Victor* rightFA = new Victor(rightFAChannel);
-	Victor* rightFB = new Victor(rightFBChannel);
+	Victor rightFA {rightFAChannel};
+	Victor rightFB {rightFBChannel};
 
 	// Motors driving back-right mecanum wheel
-	Victor* rightBA = new Victor(rightBAChannel);
-	Victor* rightBB = new Victor(rightBBChannel);
+	Victor rightBA {rightBAChannel};
+	Victor rightBB {rightBBChannel};
 
 	//Encoder encoderLeftF = new Encoder(RobotMap.encoderLeftF[0], RobotMap.encoderLeftF[0], false, Encoder.EncodingType.k4X);
 
 //		AHRS ahrs;
 
 	// PID control variables
-	static constexpr double gyroP = 0.03;
-	static constexpr double gyroI = 0.00;
-	static constexpr double gyroD = 0.00;
+	const double gyroP = 0.03;
+	const double gyroI = 0.00;
+	const double gyroD = 0.00;
 	//double kF = 0.00;
 
 	double kToleranceDegrees = 2.0;
