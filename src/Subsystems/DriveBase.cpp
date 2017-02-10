@@ -10,6 +10,7 @@ DriveBase::DriveBase() : PIDSubsystem("DriveBase", 0.0, 0.0, 0.0) {
 	//                  to
 	// Enable() - Enables the PID controller.
 	currentInputType = PIDInputType::NoPIDInput;
+	Disable();
 }
 
 double DriveBase::ReturnPIDInput() {

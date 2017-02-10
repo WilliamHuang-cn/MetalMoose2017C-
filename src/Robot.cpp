@@ -33,6 +33,8 @@ public:
 	void RobotInit() override {
 		// chooser.AddObject("My Auto", new MyAutoCommand());
 		frc::SmartDashboard::PutData("Auto Modes", &chooser);
+
+//		std::thread usbvisionThread(USBVisionThread);
 	}
 
 	/**
@@ -106,8 +108,10 @@ private:
 	static bool isPiplineEnabled;
 	static RPlidarDriver *RPdrv;
 
+	static u_int nodescount;
+
 	static void USBVisionThread() {
-	    char lastDistance[30];
+//	    char lastDistance[30];
 
 		// Get the USB camera from CameraServer
 		// Using default cam0
@@ -137,9 +141,12 @@ private:
 			// Put a rectangle on the image
 			//rectangle(mat, cv::Point(100, 100), cv::Point(400, 400),cv::Scalar(255, 255, 255), 5);
 
-			int temp = -1;
+//			int temp = -1;
 
-			processLidarDatum(&RPdrv, mat, lastDistance);
+			std::cout << mat;
+			std::cout << mat.type();
+
+//			processLidarDatum(&RPdrv, mat, lastDistance);
 
 			// Give the output stream a new image to display
 			outputStream.PutFrame(mat);
@@ -162,91 +169,10 @@ private:
 			if (*drv) {
 				if (readData(*drv,debugInfo)) tempString = std::to_string(datum[0].distance);
 			}
-			if (isDrawingRplidarMapEnabled) drawrpLidarDatum(image, lastDistance);
+			if (isDrawingRplidarMapEnabled) drawrpLidarDatum(image, lastDistance,true);
 		}
 		else closeLidar(drv);
 	}
-
-	static void drawrpLidarDatum(cv::Mat& image, char* lastDistance) {
-		cv::Point beginPoint;
-		cv::Point endPoint;
-		unsigned i;
-		float pi =3.1415926;
-		float distance;
-		cv::Scalar lineColor;
-		float theata;
-		std::string tempString;
-
-		cv::Scalar RedColor = cv::Scalar(0,0,255);
-		cv::Scalar GreenColor = cv::Scalar(0,255,0);
-		cv::Scalar BlueColor = cv::Scalar(255,0,0);
-		cv::Scalar GreyColor = cv::Scalar(200,200,200);
-		cv::Scalar ValidColor = BlueColor;
-		cv::Scalar InValidColor = GreyColor;
-
-		// scale for display mm * scale
-		float scale = 0.04;
-		// center of Image (default is 640 X 480)
-		int center_x = 320;
-		int center_y =240;
-		// Center point
-		beginPoint = cv::Point(center_x,center_y);
-
-		cv::putText(image, lastDistance, cv::Point(10,50), cv::FONT_HERSHEY_SIMPLEX, 1, GreenColor);
-
-		for (i = 0; i < nodescount ; i++) {
-			theata = datum[i].theta;
-
-			// display zero degree distance value at upleft corner if changed
-			if ((theata < 0.5) || (theata > 359.5)) {
-				if (datum[i].quality > 0)
-				{
-					// formate display string
-					sprintf(lastDistance, "%.3f",datum[i].distance / 1000.0 );
-				}
-				cv::putText(image, lastDistance, cv::Point(10,50), cv::FONT_HERSHEY_SIMPLEX, 1, GreenColor);
-			}
-
-			if (datum[i].quality > 0) {
-				lineColor = ValidColor;
-				distance = datum[i].distance;
-			}
-			else {
-				lineColor = InValidColor;
-				distance = 500;
-			}
-
-			endPoint = cv::Point(distance*cos((datum[i].theta - 90)*pi/180)*scale + center_x,
-								distance*sin((datum[i].theta - 90)*pi/180)*scale + center_y);
-			cv::line(image,beginPoint,endPoint,lineColor,1);
-		}
-
-		// Distances Mark 2m, 4m, 6m, 8m
-		for (i = 1; i <= 4; i++)
-		{
-			distance = 2000*i ;
-			endPoint = cv::Point(distance*cos(- 45*pi/180)*scale + center_x,
-							distance*sin(-45*pi/180)*scale + center_y);
-
-			// draw circle
-			cv::circle(image,beginPoint,distance*scale,GreenColor,1);
-			tempString = std::to_string(i*2) + "m";
-
-			// draw scale
-			cv::putText(image, tempString, endPoint, cv::FONT_HERSHEY_SIMPLEX, 0.4, GreenColor);
-
-			// draw zero scale
-			int segLine = 10;
-			endPoint = cv::Point(distance*cos(- 90*pi/180)*scale + center_x,
-										distance*sin(-90*pi/180)*scale + center_y);
-
-			cv::line(image, cv::Point(endPoint.x, endPoint.y - segLine),
-					cv::Point(endPoint.x, endPoint.y + segLine), RedColor, 2);
-		}
-
-		//cv::line(image,beginPoint,endPoint,lineColor,2);
-	}
-
 
 };
 

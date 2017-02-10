@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <tgmath.h>
 #include "rplidar.h"
 #include "rplidarAPI.h"
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
 
 using namespace std;
 using namespace rp::standalone::rplidar;
@@ -138,3 +141,164 @@ bool readData(RPlidarDriver * drv, bool debugInfo)
 	}
 	return IS_OK(op_result);
 }
+
+bool getDistanceAt(int dirtheta, float* realtheta, float* distance, float delta)
+{
+	bool result = false;
+	bool closeRange, inRangeBoolExpr;
+	unsigned i,low,high,validpoints;
+	float theta,dirthetaL,dirthetaH, tmpdistance;
+	const int maxdelta = 90;    // delta <= 90, search range -delta to delta along dirtheta
+	const int mindelta = 0.5;
+
+	// dirtheta example:
+	// in:  45, -45, 370, -370
+	// out: 45, 315, 10, 350
+
+	if (dirtheta < 0) dirtheta = (int(- dirtheta) / 360 + 1) * 360 + dirtheta;
+	dirtheta = dirtheta - (int(dirtheta) / 360) * 360;
+
+	// delta example:
+	// in:  0, 0.5 ,-0.5, 1, -1, 45, -45, 90, 95
+	// out: 0.5, 0.5, 0.5, 1, 1, 45, 45, 90, 90
+	delta = fabs(delta);
+	delta = delta - (int(delta) / 360) * 360;
+	if (delta >= maxdelta) delta = maxdelta;
+	if (delta < mindelta) delta = mindelta;
+
+	// example:
+	// dirthetaL -- dirthetaH
+	// 44.5 -- 45.5 : closeRange = true, dirtheta=45, delta = 0.5
+	// 359.5 -- 0.5 : clsoeRange = false, dirtheta=0, delta = 0.5
+	dirthetaL = dirtheta - delta;
+	if (dirthetaL < 0) dirthetaL = dirthetaL + 360.0;
+	dirthetaH = dirtheta + delta;
+	if (dirthetaH < 0) dirthetaH = dirthetaH + 360.0;
+
+	closeRange = (dirthetaH >= dirthetaL);
+
+	// dirthetaL -- dirthetaH
+	// 44.5 -- 45.5 : closeRange = true
+	// 359.5 -- 0.5 : clsoeRange = false
+	//
+	// **rpLidar delta theta = 360 / nodescount
+	// **search range in order datum (desc by theta)
+	//
+	// low -- high
+	// 43 -- 46 : closeRange = true
+	// 357 -- 363 : closeRange = false
+
+	low = int(dirthetaL * nodescount / 360) - 1;
+	if (low < 0) low = 0;
+	high = int(dirthetaH * nodescount / 360) + 1;
+	if (high >= nodescount) high = nodescount - 1;
+	if (!closeRange) high = high + nodescount;
+
+	validpoints = 0;
+	*distance = 0;
+	*realtheta = 0;
+	// average theat and distance between low and high
+	for (i = low; i <= high ; i++) {
+		if (closeRange) {
+			theta = datum[i].theta;
+			tmpdistance = datum[i].distance;
+			inRangeBoolExpr = ((theta <= dirthetaH) && (theta >= dirthetaL));
+		}
+		else {
+			theta = datum[i % nodescount].theta;
+			tmpdistance = datum[i % nodescount].distance;
+			inRangeBoolExpr = ((theta <= dirthetaH) || (theta >= dirthetaL));
+			if (theta <= dirthetaH) theta = theta + 360;
+		}
+
+		if (inRangeBoolExpr) {
+			if (datum[i].quality > 0) {
+				*distance = *distance + tmpdistance;
+				*realtheta = *realtheta + theta;
+				validpoints ++;
+			}
+		}
+	}
+
+	result = (validpoints > 0);
+	if (result) {
+		*distance = *distance / validpoints;
+		*realtheta = *realtheta /validpoints;
+		*realtheta = *realtheta - (int(*realtheta) / 360) * 360;
+	}
+	/* test */
+//	result = true;
+//	*distance = low * 1000;
+//	*realtheta = high;
+
+	return result;
+}
+
+void drawrpLidarDatum(cv::Mat& image, char* lastDistance, bool validDistance) {
+	cv::Point beginPoint;
+	cv::Point endPoint;
+	unsigned i;
+	float pi =3.1415926;
+	float theta, distance;
+	cv::Scalar lineColor;
+	string tempString;
+
+	cv::Scalar RedColor = cv::Scalar(0,0,255);
+	cv::Scalar GreenColor = cv::Scalar(0,255,0);
+	cv::Scalar BlueColor = cv::Scalar(255,0,0);
+	cv::Scalar GreyColor = cv::Scalar(200,200,200);
+	cv::Scalar ValidColor = BlueColor;
+	cv::Scalar InValidColor = GreyColor;
+
+	// scale for display mm * scale
+	float scale = 0.04;
+	// center of Image (default is 640 X 480)
+	int center_x = 320;
+	int center_y =240;
+	// Center point
+	beginPoint = cv::Point(center_x,center_y);
+
+	for (i = 0; i < nodescount ; i++) {
+		theta = datum[i].theta;
+		if (datum[i].quality > 0) {
+			lineColor = ValidColor;
+			distance = datum[i].distance;
+		}
+		else {
+			lineColor = InValidColor;
+			distance = 500;
+		}
+		endPoint = cv::Point(distance*cos((theta - 90)*pi/180)*scale + center_x,
+							distance*sin((theta - 90)*pi/180)*scale + center_y);
+		cv::line(image,beginPoint,endPoint,lineColor,1);
+	}
+
+	// Distance value disaply
+	if (validDistance) cv::putText(image, lastDistance, cv::Point(10,50), cv::FONT_HERSHEY_SIMPLEX, 1, GreenColor);
+	else cv::putText(image, lastDistance, cv::Point(10,50), cv::FONT_HERSHEY_SIMPLEX, 1, RedColor);
+
+	// Distances Mark 2m, 4m, 6m, 8m
+	for (i = 1; i <= 4; i++) {
+		distance = 2000*i ;
+		endPoint = cv::Point(distance*cos(- 45*pi/180)*scale + center_x,
+						distance*sin(-45*pi/180)*scale + center_y);
+
+		// draw circle
+		cv::circle(image,beginPoint,distance*scale,GreenColor,1);
+		tempString = std::to_string(i*2) + "m";
+
+		// draw scale
+		cv::putText(image, tempString, endPoint, cv::FONT_HERSHEY_SIMPLEX, 0.4, GreenColor);
+
+		// draw zero scale
+		int segLine = 10;
+		endPoint = cv::Point(distance*cos(- 90*pi/180)*scale + center_x,
+									distance*sin(-90*pi/180)*scale + center_y);
+
+		cv::line(image, cv::Point(endPoint.x, endPoint.y - segLine),
+				cv::Point(endPoint.x, endPoint.y + segLine), RedColor, 2);
+	}
+
+	//cv::line(image,beginPoint,endPoint,lineColor,2);
+}
+
