@@ -10,6 +10,7 @@ DriveBase::DriveBase() : PIDSubsystem("DriveBase", 0.0, 0.0, 0.0) {
 	//                  to
 	// Enable() - Enables the PID controller.
 	currentInputType = PIDInputType::NoPIDInput;
+	ahrs = new AHRS;
 }
 
 double DriveBase::ReturnPIDInput() {
@@ -27,7 +28,7 @@ double DriveBase::ReturnPIDInput() {
 		return 0;
 	case PIDInputType::GyroPIDInput:
 		// Use the Yaw values provided by NavX interface
-//		return ahrs.getYaw();
+		return ahrs.GetYaw();
 		return 0;
 	default:
 		return 0;
