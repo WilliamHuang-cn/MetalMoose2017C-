@@ -5,7 +5,14 @@
 MecanumDrive::MecanumDrive() : CommandBase("MecanumDrive"){
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
-	Requires(Robot::driveBase.get());
+//	Requires(driveBase.get());
+
+	// if driveBase is shared_ptr
+	Requires(Robot::GetdriveBase().get());
+
+	// if driveBase is unique_ptr
+//	Robot::GetdriveBase();
+//	Requires(Robot::driveBase.get());
 }
 
 // Called just before this Command runs the first time
@@ -30,7 +37,7 @@ bool MecanumDrive::IsFinished() {
 // Called once after isFinished returns true
 void MecanumDrive::End() {
 
-	driveBase->stop();
+	Robot::driveBase->stop();
 }
 
 // Called when another command which requires one or more of the same

@@ -4,11 +4,25 @@
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>
 
-std::shared_ptr<DriveBase> Robot::driveBase = std::make_shared<DriveBase>();
-std::shared_ptr<Gear> Robot::gear = std::make_shared<Gear>();
-std::shared_ptr<Hanger> Robot::hanger = std::make_shared<Hanger>();
-std::shared_ptr<Shooter> Robot::shooter = std::make_shared<Shooter>();
+std::shared_ptr<DriveBase> Robot::driveBase = std::shared_ptr<DriveBase>(nullptr);
+std::shared_ptr<Gear> Robot::gear = std::shared_ptr<Gear>(nullptr);
+std::shared_ptr<Hanger> Robot::hanger = std::shared_ptr<Hanger>(nullptr);
+std::shared_ptr<Shooter> Robot::shooter = std::shared_ptr<Shooter>(nullptr);
 std::unique_ptr<OI> Robot::oi = std::make_unique<OI>();
+
+//std::unique_ptr<DriveBase> Robot::driveBase = std::unique_ptr<DriveBase>(nullptr);		// unique pointer
+
+std::shared_ptr<DriveBase> Robot::GetdriveBase() {
+	if (driveBase.get() == nullptr)
+		driveBase = std::make_shared<DriveBase>();
+	return driveBase;
+}
+
+// Note: unique pointer can not be return by GetdriveBase !
+//void Robot::GetdriveBase() {
+//	if (driveBase.get() == nullptr)
+//		driveBase = std::move(std::make_unique<DriveBase>());
+//}
 
 void Robot::RobotInit() {
 	// chooser.AddObject("My Auto", new MyAutoCommand());

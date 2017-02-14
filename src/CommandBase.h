@@ -22,7 +22,7 @@ class CommandBase: public frc::Command {
 public:
 	CommandBase(const std::string& name);
 	CommandBase() = default;
-
+/*
 	// Create a single static instance of all of your subsystems
 	static std::shared_ptr<DriveBase> driveBase;
 	static std::shared_ptr<Gear> gear;
@@ -33,6 +33,7 @@ public:
 
 	static void initializeSubsystems();
 	static std::shared_ptr<DriveBase> GetdriveBase();
+*/
 };
 
 #endif  // COMMAND_BASE_H
