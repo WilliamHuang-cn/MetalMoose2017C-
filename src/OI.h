@@ -1,63 +1,66 @@
 #ifndef OI_H
 #define OI_H
 
-//#include <WPILib.h>
 #include <Buttons/JoystickButton.h>
 #include <Joystick.h>
 
 class OI {
+public:
+	OI();
+	frc::Joystick* GetDriverJoystick();
+	frc::Joystick* GetOperatorJoystick();
+
 private:
+	frc::Joystick driver { 0 };
+	frc::Joystick operatorJoy { 1 };
 
-	Joystick _driver {0};
-	Joystick _operator {1};
+	frc::JoystickButton driverX { &driver, 0 };
+	frc::JoystickButton driverA { &driver, 1 };
+	frc::JoystickButton driverB { &driver, 2 };
+	frc::JoystickButton driverY { &driver, 3 };
 
-	JoystickButton _driverX {&_driver,0};
-	JoystickButton _driverA {&_driver,1};
-	JoystickButton _driverB {&_driver,2};
-	JoystickButton _driverY {&_driver,3};
+	frc::JoystickButton driverLB { &driver, 4 };
+	frc::JoystickButton driverRB { &driver, 5 };
+	frc::JoystickButton driverLT { &driver, 6 };
+	frc::JoystickButton driverRT { &driver, 7 };
 
-	JoystickButton _driverLB {&_driver,4};
-	JoystickButton _driverRB {&_driver,5};
-	JoystickButton _driverLT {&_driver,6};
-	JoystickButton _driverRT {&_driver,7};
+	frc::JoystickButton operatorX { &operatorJoy, 0 };
+	frc::JoystickButton operatorA { &operatorJoy, 1 };
+	frc::JoystickButton operatorB { &operatorJoy, 2 };
+	frc::JoystickButton operatorY { &operatorJoy, 3 };
 
-	JoystickButton _operatorX {&_operator,0};
-	JoystickButton _operatorA {&_operator,1};
-	JoystickButton _operatorB {&_operator,2};
-	JoystickButton _operatorY {&_operator,3};
+	frc::JoystickButton operatorLB { &operatorJoy, 4 };
+	frc::JoystickButton operatorRB { &operatorJoy, 5 };
+	frc::JoystickButton operatorLT { &operatorJoy, 6 };
+	frc::JoystickButton operatorRT { &operatorJoy, 7 };
 
-	JoystickButton _operatorLB {&_operator,4};
-	JoystickButton _operatorRB {&_operator,5};
-	JoystickButton _operatorLT {&_operator,6};
-	JoystickButton _operatorRT {&_operator,7};
+/*
+	static Joystick* driver;
+	static Joystick* operatorJoy;
+	static JoystickButton *driverX;
+	static JoystickButton* driverA;
+	static JoystickButton* driverB;
+	static JoystickButton* driverY;
+
+	static JoystickButton* driverLB;
+	static JoystickButton* driverRB;
+	static JoystickButton* driverLT;
+	static JoystickButton* driverRT;
+
+	static JoystickButton* operatorX;
+	static JoystickButton* operatorA;
+	static JoystickButton* operatorB;
+	static JoystickButton* operatorY;
+
+	static JoystickButton* operatorLB;
+	static JoystickButton* operatorRB;
+	static JoystickButton* operatorLT;
+	static JoystickButton* operatorRT;
+*/
 
 //DRIVE CODE
 
 //	JoystickTrigger joystickTrigger = JoystickTrigger();
-public:
-	OI();
-	Joystick *driver;
-	Joystick *operatorJoy;
-
-	JoystickButton *driverX;
-	JoystickButton *driverA;
-	JoystickButton *driverB;
-	JoystickButton *driverY;
-
-	JoystickButton *driverLB;
-	JoystickButton *driverRB;
-	JoystickButton *driverLT;
-	JoystickButton *driverRT;
-
-	JoystickButton *operatorX;
-	JoystickButton *operatorA;
-	JoystickButton *operatorB;
-	JoystickButton *operatorY;
-
-	JoystickButton *operatorLB;
-	JoystickButton *operatorRB;
-	JoystickButton *operatorLT;
-	JoystickButton *operatorRT;
 };
 
 #endif  // OI_H
