@@ -28,11 +28,10 @@ public:
 	static std::shared_ptr<Gear> gear;
 	static std::shared_ptr<Hanger> hanger;
 	static std::shared_ptr<Shooter> shooter;
-
 	static std::unique_ptr<OI> oi;
 
-	static void initializeSubsystems();
 	static std::shared_ptr<DriveBase> GetdriveBase();
+
 };
 
 #endif  // COMMAND_BASE_H

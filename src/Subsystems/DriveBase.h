@@ -17,7 +17,7 @@ public:
 
 	PIDInputType currentInputType;
 
-	AHRS ahrs;
+	AHRS *ahrs;
 
 private:
 	// Motors driving front-left mecanum wheel
