@@ -4,6 +4,7 @@
 #include <Commands/PIDSubsystem.h>
 #include "RobotMap.h"
 #include <WPILib.h>
+#include "AHRS.h"
 
 class DriveBase: public PIDSubsystem {
 public:
@@ -15,6 +16,8 @@ public:
 	};
 
 	PIDInputType currentInputType;
+
+	AHRS *ahrs;
 
 private:
 	// Motors driving front-left mecanum wheel

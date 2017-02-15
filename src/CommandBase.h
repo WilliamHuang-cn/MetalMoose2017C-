@@ -24,12 +24,14 @@ public:
 	CommandBase() = default;
 
 	// Create a single static instance of all of your subsystems
-	static std::unique_ptr<DriveBase> driveBase;
-	static std::unique_ptr<Gear> gear;
-	static std::unique_ptr<Hanger> hanger;
-	static std::unique_ptr<Shooter> shooter;
-
+	static std::shared_ptr<DriveBase> driveBase;
+	static std::shared_ptr<Gear> gear;
+	static std::shared_ptr<Hanger> hanger;
+	static std::shared_ptr<Shooter> shooter;
 	static std::unique_ptr<OI> oi;
+
+	static std::shared_ptr<DriveBase> GetdriveBase();
+
 };
 
 #endif  // COMMAND_BASE_H

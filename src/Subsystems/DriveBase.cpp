@@ -11,6 +11,7 @@ DriveBase::DriveBase() : PIDSubsystem("DriveBase", 0.0, 0.0, 0.0) {
 	// Enable() - Enables the PID controller.
 	currentInputType = PIDInputType::NoPIDInput;
 	Disable();
+	ahrs = new AHRS(SerialPort::kUSB);
 }
 
 double DriveBase::ReturnPIDInput() {
@@ -28,7 +29,7 @@ double DriveBase::ReturnPIDInput() {
 		return 0;
 	case PIDInputType::GyroPIDInput:
 		// Use the Yaw values provided by NavX interface
-//		return ahrs.getYaw();
+		return ahrs->GetYaw();
 		return 0;
 	default:
 		return 0;

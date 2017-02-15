@@ -3,26 +3,26 @@
 using namespace frc;
 
 OI::OI() {
-	// Process operator interface input here.
-	OI::driver = &_driver;
-	OI::operatorJoy = &_operator;
+	/*
+	frc::SmartDashboard::PutData("Open Claw", new OpenClaw());
+	frc::SmartDashboard::PutData("Close Claw", new CloseClaw());
 
-	OI::driverX = &_driverX;
-	OI::driverA = &_driverA;
-	OI::driverB = &_driverB;
-	OI::driverY = &_driverY;
-	OI::driverLB = &_driverLB;
-	OI::driverRB = &_driverRB;
-	OI::driverLT = &_driverLT;
-	OI::driverRT = &_driverRT;
+	// Connect the buttons to commands
+	d_up.WhenPressed(new SetElevatorSetpoint(0.2));
+	d_down.WhenPressed(new SetElevatorSetpoint(-0.2));
+	d_right.WhenPressed(new CloseClaw());
+	d_left.WhenPressed(new OpenClaw());
 
-	OI::operatorX = &_operatorX;
-	OI::operatorA = &_operatorA;
-	OI::operatorB = &_operatorB;
-	OI::operatorY = &_operatorY;
+	r1.WhenPressed(new PrepareToPickup());
+	r2.WhenPressed(new Pickup());
+	l1.WhenPressed(new Place());
+	l2.WhenPressed(new Autonomous());*/
+}
 
-	OI::operatorLB = &_operatorLB;
-	OI::operatorRB = &_operatorRB;
-	OI::operatorLT = &_operatorLT;
-	OI::operatorRT = &_operatorRT;
+frc::Joystick* OI::GetDriverJoystick() {
+	return &driver;
+}
+
+frc::Joystick* OI::GetOperatorJoystick() {
+	return &operatorJoy;
 }
