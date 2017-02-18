@@ -17,8 +17,6 @@ public:
 
 	PIDInputType currentInputType;
 
-	AHRS *ahrs;
-
 private:
 	// Motors driving front-left mecanum wheel
 	Victor leftFA {leftFAChannel};
@@ -36,9 +34,15 @@ private:
 	Victor rightBA {rightBAChannel};
 	Victor rightBB {rightBBChannel};
 
+	//SOLENOIDS
+	DoubleSolenoid solRightF {solRightFChannels[0], solRightFChannels[1]};
+	DoubleSolenoid solRightB {solRightBChannels[0], solRightBChannels[1]};
+	DoubleSolenoid solLeftF {solLeftFChannels[0], solLeftFChannels[1]};
+	DoubleSolenoid solLeftB {solLeftBChannels[0], solLeftBChannels[1]};
+
 	//Encoder encoderLeftF = new Encoder(RobotMap.encoderLeftF[0], RobotMap.encoderLeftF[0], false, Encoder.EncodingType.k4X);
 
-//		AHRS ahrs;
+	AHRS *ahrs;
 
 	// PID control variables
 	const double gyroP = 0.03;
@@ -59,6 +63,9 @@ public:
 	void setNoPid();
 	double ReturnPIDInput();
 	void usePIDOutput(double output);
+	void setToLowGear();
+	void setToHighGear();
+
 
 protected:
 	void setLeftFSpeed(double speed);

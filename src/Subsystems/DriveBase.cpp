@@ -100,7 +100,7 @@ void DriveBase::setGyroPIDControl(double setpoint) {
         GetPIDController()->SetSetpoint(setpoint);
     	}
 
-//    	SmartDashboard.PutNumber("YAW", ahrs.getYaw());
+    	SmartDashboard::PutNumber("YAW", ahrs->GetYaw());
 
     	if(GetPIDController()->OnTarget()){
     		setNoPid();

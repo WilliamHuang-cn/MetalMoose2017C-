@@ -17,9 +17,16 @@ static constexpr int rightFBChannel = 1;
 static constexpr int rightBAChannel = 2;
 static constexpr int rightBBChannel = 3;
 
-static constexpr int shooterMotor = 4;
+static constexpr int shooterMotor = 8;
 
-constexpr int encoderLeftF[] = { 0, 1 };
+static constexpr int encoderLeftF[] = { 0, 1 };
+
+static constexpr int gearGate = 9;
+
+static constexpr int solRightFChannels[] = { 0, 1 };
+static constexpr int solRightBChannels[] = { 2, 3 };
+static constexpr int solLeftFChannels[] = { 4, 5 };
+static constexpr int solLeftBChannels[] = { 6, 7 };
 
 // If you are using multiple modules, make sure to define both the port
 // number and the module. For example you with a rangefinder:
