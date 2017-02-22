@@ -33,16 +33,18 @@ LaserRadar::~LaserRadar() {
 	closeLidar();
 }
 
-void LaserRadar::Start() {
+bool LaserRadar::Start() {
 	int errorCode;
 
 	if (!drv) drv = openLidar(errorCode,com_path.c_str(),debugInfo);
-	if (!drv) return;
+	if (!drv) return (false);
 	_Start();
+	return (Scanning);
 }
 
-void LaserRadar::Stop() {
+bool LaserRadar::Stop() {
 	_Stop();
+	return (!Scanning);
 }
 
 bool LaserRadar::checkRPLIDARHealth()
@@ -333,9 +335,10 @@ void LaserRadar::drawrRadarDatum(cv::Mat& image, char* lastDistance, bool validD
 
 	// scale for display mm * scale
 	float scale = 0.04;
-	// center of Image (default is 640 X 480)
-	int center_x = 320;
-	int center_y =240;
+	// center of Image (default is 640 X 480 center at (320,240))
+	int center_x = image.cols / 2;
+	int center_y = image.rows /2;
+
 	// Center point
 	beginPoint = cv::Point(center_x,center_y);
 
@@ -379,7 +382,5 @@ void LaserRadar::drawrRadarDatum(cv::Mat& image, char* lastDistance, bool validD
 		cv::line(image, cv::Point(endPoint.x, endPoint.y - segLine),
 				cv::Point(endPoint.x, endPoint.y + segLine), RedColor, 2);
 	}
-
-	//cv::line(image,beginPoint,endPoint,lineColor,2);
 }
 

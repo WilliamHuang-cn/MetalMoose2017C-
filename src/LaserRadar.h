@@ -43,8 +43,8 @@ public:
 	LaserRadar();
 	LaserRadar(const string opt_com_path);
 	virtual ~LaserRadar();
-	void Start();
-	void Stop();
+	bool Start();
+	bool Stop();
 	bool readData();
 	bool getDistanceAt(int dirtheta, float* realtheta, float* distance, float delta);
 	void drawrRadarDatum(cv::Mat& image, char* lastDistance, bool validDistance);

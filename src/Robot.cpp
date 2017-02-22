@@ -2,17 +2,16 @@
 
 void Robot::RobotInit() {
 	// chooser.AddObject("My Auto", new MyAutoCommand());
-	frc::SmartDashboard::PutData("Auto Modes", &chooser);
+	frc::SmartDashboard::PutData("Auto Modes Metal", &chooser);
 
 	// start usbvision thread
 	std::thread usbvisionThread(USBVisionThread);
 	usbvisionThread.detach();
 }
-;
 
 /**
  * This function is called once each time the robot enters Disabled mode.
- * You can use it to reset any subsystem information you want to clear when
+ * You can use it to reset any subsystem information you want to" clear when
  * the robot is disabled.
  */
 void Robot::DisabledInit() {
@@ -20,6 +19,7 @@ void Robot::DisabledInit() {
 }
 
 void Robot::DisabledPeriodic() {
+	setauxFeature();
 	frc::Scheduler::GetInstance()->Run();
 }
 
@@ -38,7 +38,6 @@ void Robot::AutonomousInit() {
 	/* std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
 	 if (autoSelected == "My Auto") {
 	 autonomousCommand.reset(new MyAutoCommand());
-	 >>>>>>> refs/heads/master
 	 }
 	 else {
 	 autonomousCommand.reset(new ExampleCommand());
@@ -52,6 +51,7 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
+	setauxFeature();
 	frc::Scheduler::GetInstance()->Run();
 }
 
@@ -66,10 +66,12 @@ void Robot::TeleopInit() {
 }
 
 void Robot::TeleopPeriodic() {
+	setauxFeature();
 	frc::Scheduler::GetInstance()->Run();
 }
 
 void Robot::TestPeriodic() {
+	setauxFeature();
 //		frc::LiveWindow::GetInstance()->Run();
 }
 
@@ -77,6 +79,7 @@ void Robot::setauxFeature() {
 	setScanRplidarEnabled();
 	setDrawingRplidarMapEnabled();
 	setPiplineEnabled();
+	sendRobotState();
 }
 
 void Robot::setScanRplidarEnabled() {
@@ -89,6 +92,23 @@ void Robot::setDrawingRplidarMapEnabled() {
 
 void Robot::setPiplineEnabled() {
 	isPiplineEnabled = true;
+}
+
+void Robot::sendRobotState() {
+	frc::SmartDashboard::PutBoolean("LaserRadarEnabled", isScanRplidarEnabled);
+	frc::SmartDashboard::PutBoolean("LaserRadarMapEnabled", isDrawingRplidarMapEnabled);
+	frc::SmartDashboard::PutBoolean("ImageProcessingEnabled", isPiplineEnabled);
+	frc::SmartDashboard::PutBoolean("VideoEnabled", isVideoEnabled);
+	// LaserRadar Status
+	frc::SmartDashboard::PutBoolean("LaserRadarIsPoweron", Robot::laserRadar->isValid());
+	frc::SmartDashboard::PutBoolean("LaserRadarIsScanning", Robot::laserRadar->isScanning());
+}
+
+void Robot::receiveRobotState() {
+	isScanRplidarEnabled = frc::SmartDashboard::GetBoolean("LaserRadarEnabled", false);
+	isDrawingRplidarMapEnabled = frc::SmartDashboard::GetBoolean("LaserRadarMapEnabled", false);
+	isPiplineEnabled = frc::SmartDashboard::GetBoolean("ImageProcessingEnabled", false);
+	isVideoEnabled = frc::SmartDashboard::GetBoolean("VideoEnabled", false);
 }
 
 bool Robot::isScanRplidarEnabled = true;
@@ -104,20 +124,22 @@ void Robot::processLidarDatum(cv::Mat& image, char* lastDistance) {
 	float realtheta, distanceF;
 
 	if (isScanRplidarEnabled) {
-		laserRadar->Start();
-		if (laserRadar->readData()) {
-			validDistance = laserRadar->getDistanceAt(0, &realtheta, &distanceF,
-					1);
-			if (validDistance) {
-				SmartDashboard::PutNumber("Distance", distanceF / 1000.0);
-				sprintf(lastDistance, "%.2fm %dd.", distanceF / 1000.0,
-						(int(realtheta + 0.5)) % 360);
+		if (laserRadar->Start()) {
+			if (laserRadar->readData()) {
+				validDistance = laserRadar->getDistanceAt(0, &realtheta, &distanceF,
+						1);
+				if (validDistance) {
+					SmartDashboard::PutNumber("Distance", distanceF / 1000.0);
+					sprintf(lastDistance, "%.2fm %dd.", distanceF / 1000.0,
+							(int(realtheta + 0.5)) % 360);
+				}
 			}
+			if (isDrawingRplidarMapEnabled)
+				laserRadar->drawrRadarDatum(image, lastDistance, validDistance);
 		}
-		if (isDrawingRplidarMapEnabled)
-			laserRadar->drawrRadarDatum(image, lastDistance, validDistance);
+		else std::cout << "start radar false.\n";
 	} else
-		laserRadar->Stop();
+		if (! laserRadar->Stop()) std::cout << "stop radar false\n";
 }
 
 void Robot::USBVisionThread() {
@@ -125,9 +147,14 @@ void Robot::USBVisionThread() {
 
 	// Get the USB camera from CameraServer
 	// Using default cam0
-	cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
+	cs::UsbCamera camera("USB0", 0);
+	CameraServer::GetInstance()->AddCamera(camera);
 	// Set the resolution
 	camera.SetResolution(640, 480);
+
+//	cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
+	// Set the resolution
+//	camera.SetResolution(640, 480);
 
 	// Get a CvSink. This will capture Mats from the Camera
 	cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo();
@@ -148,13 +175,6 @@ void Robot::USBVisionThread() {
 			// skip the rest of the current iteration
 			continue;
 		}
-		// Put a rectangle on the image
-		//rectangle(mat, cv::Point(100, 100), cv::Point(400, 400),cv::Scalar(255, 255, 255), 5);
-
-//			int temp = -1;
-
-//			std::cout << mat;
-//			std::cout << mat.type();
 
 		if (mat.empty())
 			std::cout << "image is empty \n";
